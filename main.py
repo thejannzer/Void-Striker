@@ -19,6 +19,7 @@ while running:
 
     # RENDER YOUR GAME HERE
     ship.draw(screen)
+    ship.move()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
