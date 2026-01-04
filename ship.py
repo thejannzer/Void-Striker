@@ -19,3 +19,11 @@ class Ship:
             self.start_y -= 8
         if keys[pygame.K_DOWN]:
             self.start_y += 8
+
+    def shoot(self, screen):
+        pr = pygame.Rect(self.start_x + 64, self.start_y, 10, 10)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            pygame.draw.rect(screen, (0, 0, 0), pr)
+            # wie Rechteck nach oben bewegen?
+
