@@ -1,4 +1,5 @@
 import pygame
+import time
 
 class Ship:
     def __init__(self):
@@ -6,6 +7,8 @@ class Ship:
         self.start_x = 960 - 64
         self.start_y = 540 - 64
         self.bullets = []
+        self.shoot_delay = 300
+        self.last_shoot = 0
 
     def draw(self, screen):
         screen.blit(self.ship, (self.start_x, self.start_y))
@@ -23,9 +26,13 @@ class Ship:
 
     def shoot(self, screen):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_1]:
-            bullet = pygame.Rect(self.start_x + 27, self.start_y, 10, 10)
-            self.bullets.append(bullet)
+        current_time = pygame.time.get_ticks()
+        if keys[pygame.K_SPACE]:
+            if current_time - self.last_shoot >= self.shoot_delay:
+                bullet = pygame.Rect(self.start_x + 27, self.start_y, 10, 10)
+                #Shoot Sound einfügen
+                self.bullets.append(bullet)
+                self.last_shoot = current_time
             
     def update_bullets(self, screen):
         for bullet in self.bullets:
