@@ -2,6 +2,7 @@ import pygame
 import time
 
 class Ship:
+    pygame.mixer.init()
     def __init__(self):
         self.ship = pygame.image.load("images/ship_G.png")
         self.start_x = 960 - 64
@@ -9,6 +10,7 @@ class Ship:
         self.bullets = []
         self.shoot_delay = 300
         self.last_shoot = 0
+        self.sound = pygame.mixer.Sound('''pfad zur datei''')
 
     def draw(self, screen):
         screen.blit(self.ship, (self.start_x, self.start_y))
@@ -30,7 +32,7 @@ class Ship:
         if keys[pygame.K_SPACE]:
             if current_time - self.last_shoot >= self.shoot_delay:
                 bullet = pygame.Rect(self.start_x + 27, self.start_y, 10, 10)
-                #Shoot Sound einfügen
+                #Shoot Sound einfügen (sound.play())
                 self.bullets.append(bullet)
                 self.last_shoot = current_time
             
