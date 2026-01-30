@@ -1,5 +1,6 @@
 import pygame
 from ship import Ship
+from meteor import Meteor
 
 # pygame setup
 pygame.init()
@@ -9,6 +10,7 @@ clock = pygame.time.Clock()
 running = True
 
 ship = Ship()
+meteor = Meteor()
 
 while running:
     for event in pygame.event.get():
@@ -22,6 +24,7 @@ while running:
     ship.shoot(screen)
     ship.update_bullets(screen)
     ship.draw(screen)
+    meteor.draw(screen)
 
     # flip() the display to put your work on screen
     pygame.display.flip()

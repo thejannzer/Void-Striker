@@ -10,7 +10,7 @@ class Ship:
         self.bullets = []
         self.shoot_delay = 300
         self.last_shoot = 0
-        self.sound = pygame.mixer.Sound('''pfad zur datei''')
+        #self.sound = pygame.mixer.Sound('''pfad zur datei''')
 
     def draw(self, screen):
         screen.blit(self.ship, (self.start_x, self.start_y))
