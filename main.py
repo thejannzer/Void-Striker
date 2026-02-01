@@ -25,6 +25,7 @@ while running:
     ship.update_bullets(screen)
     ship.draw(screen)
     meteor.draw(screen)
+    meteor.update()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
