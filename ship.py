@@ -37,7 +37,7 @@ class Ship:
                 self.last_shoot = current_time
             
     def update_bullets(self, screen):
-        for bullet in self.bullets:
+        for bullet in self.bullets[:]:
             pygame.draw.rect(screen, (250, 250, 250), bullet)
             bullet.y -= 15
             if bullet.y < 0:

@@ -34,8 +34,16 @@ while running:
     ship.draw(screen)
     
     for meteor in meteors:
-        meteor.draw(screen)
         meteor.update()
+        meteor.draw(screen)
+
+    #Kollision
+    for bullet in ship.bullets[:]:           #[:] macht eine Kopie der Liste... verhindert Fehler beim entfernen
+        for meteor in meteors[:]:
+            if bullet.colliderect(meteor.rect):
+                ship.bullets.remove(bullet)
+                meteors.remove(meteor)
+                break
 
     # flip() the display to put your work on screen
     pygame.display.flip()
