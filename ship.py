@@ -2,12 +2,13 @@ import pygame
 
 class Ship:
     def __init__(self):
-        self.ship = pygame.image.load("images/ship_G.png")
+        self.ship = pygame.image.load("images/ship_2.png")
         self.rect = self.ship.get_rect()
         self.start_x = 960 - 64
         self.start_y = 540 - 64
         self.rect.topleft = (self.start_x, self.start_y)
         self.bullets = []
+        self.bullet_color = (250, 250, 250)
         self.shoot_delay = 300
         self.last_shoot = 0
         self.sound = pygame.mixer.Sound('sounds/shoot.mp3')
@@ -34,13 +35,13 @@ class Ship:
         if keys[pygame.K_SPACE]:
             if current_time - self.last_shoot >= self.shoot_delay:
                 self.sound.play()
-                bullet = pygame.Rect(self.start_x + 27, self.start_y, 10, 10)
+                bullet = pygame.Rect(self.start_x + 50, self.start_y, 10, 10)
                 self.bullets.append(bullet)
                 self.last_shoot = current_time
             
     def update_bullets(self, screen):
         for bullet in self.bullets[:]:
-            pygame.draw.rect(screen, (250, 250, 250), bullet)
+            pygame.draw.rect(screen, self.bullet_color, bullet)
             bullet.y -= 15
             if bullet.y < 0:
                 self.bullets.remove(bullet)

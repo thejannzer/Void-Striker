@@ -8,6 +8,7 @@ pygame.mixer.init()
 music = pygame.mixer.music.load('sounds/retro-music.mp3')
 crash = pygame.mixer.Sound('sounds/crash-sound.mp3')
 screen = pygame.display.set_mode((1920, 1080))
+background = pygame.image.load("images/background.jpg").convert()
 pygame.display.set_caption("Void Striker")
 clock = pygame.time.Clock()
 running = True
@@ -51,7 +52,7 @@ while running:
         if event.type == SPAWN_METEOR:
             meteors.append(Meteor())
 
-    screen.fill(bg_color)
+    screen.blit(background, (0, 0))
 
     for meteor in meteors:
         meteor.update()
@@ -106,6 +107,8 @@ while running:
         pygame.time.set_timer(SPAWN_METEOR, 500)
 
     elif score >= 5 and level == 2:
+        ship.shoot_delay = 220
+        ship.bullet_color = (255, 0, 0)
         level = 3
         pygame.time.set_timer(SPAWN_METEOR, 250)
 
@@ -113,19 +116,18 @@ while running:
         pygame.mixer.music.stop()
         pygame.mixer.music.load('sounds/level4-music.mp3')
         pygame.mixer.music.play(-1)
-        bg_color = (80, 0, 10)
         level = 4
-        pygame.time.set_timer(SPAWN_METEOR, 100)
+        pygame.time.set_timer(SPAWN_METEOR, 150)
 
     elif score >= 15 and level == 4:
         ship.shoot_delay = 150
+        ship.bullet_color = (60, 220, 210)
         level = 5
-        pygame.time.set_timer(SPAWN_METEOR, 50)
+        pygame.time.set_timer(SPAWN_METEOR, 100)
     
     elif score >= 50:
         won = True
 
-    
     score_text(f"Score: {score}")
     level_text(f"Level: {level}")
 

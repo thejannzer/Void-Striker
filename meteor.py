@@ -3,7 +3,7 @@ import random
 
 class Meteor:
     def __init__(self):
-        self.image = pygame.image.load("images/meteor_squareDetailedSmall.png")
+        self.image = pygame.image.load("images/meteor_2.png")
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, 1920 - 64)
         self.rect.y = -64
