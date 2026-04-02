@@ -1,30 +1,32 @@
 import pygame
-import time
 
 class Ship:
-    pygame.mixer.init()
     def __init__(self):
         self.ship = pygame.image.load("images/ship_G.png")
+        self.rect = self.ship.get_rect()
         self.start_x = 960 - 64
         self.start_y = 540 - 64
+        self.rect.topleft = (self.start_x, self.start_y)
         self.bullets = []
         self.shoot_delay = 300
         self.last_shoot = 0
         self.sound = pygame.mixer.Sound('sounds/shoot.mp3')
 
     def draw(self, screen):
-        screen.blit(self.ship, (self.start_x, self.start_y))
+        screen.blit(self.ship, self.rect)
 
     def move(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.start_x -= 8
+            self.start_x -= 10
         if keys[pygame.K_RIGHT]:
-            self.start_x += 8
+            self.start_x += 10
         if keys[pygame.K_UP]:
-            self.start_y -= 8
+            self.start_y -= 10
         if keys[pygame.K_DOWN]:
-            self.start_y += 8
+            self.start_y += 10
+        
+        self.rect.topleft = (self.start_x, self.start_y)
 
     def shoot(self, screen):
         keys = pygame.key.get_pressed()

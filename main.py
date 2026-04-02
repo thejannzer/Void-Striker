@@ -5,12 +5,14 @@ from meteor import Meteor
 # pygame setup
 pygame.init()
 pygame.mixer.init()
-music = pygame.mixer.Sound('sounds/retro-music.mp3')
+music = pygame.mixer.music.load('sounds/retro-music.mp3')
 crash = pygame.mixer.Sound('sounds/crash-sound.mp3')
 screen = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("Void Striker")
 clock = pygame.time.Clock()
 running = True
+
+bg_color = (10, 0, 50)
 
 score = 0
 
@@ -18,16 +20,28 @@ ship = Ship()
 
 meteors = []
 
+game_over = False
+
+won = False
+
+spawn_rate = 1000
+level = 1
+
 #eigenes Event für Meteor-Spawn
 SPAWN_METEOR = pygame.USEREVENT + 1
-pygame.time.set_timer(SPAWN_METEOR, 1000)  # alle 1000 ms
+pygame.time.set_timer(SPAWN_METEOR, spawn_rate)  # alle 1000 ms
 
 def score_text(text):
     font = pygame.font.SysFont("arial", 40)
     text_surface = font.render(text, True, (255, 255, 255))
     screen.blit(text_surface, (20, 20))
+
+def level_text(text):
+    font = pygame.font.SysFont("arial", 40)
+    text_surface = font.render(text, True, (255, 255, 255))
+    screen.blit(text_surface, (1750, 20))
  
-music.play(-1)
+pygame.mixer.music.play(-1)
 
 while running:
     for event in pygame.event.get():
@@ -37,19 +51,38 @@ while running:
         if event.type == SPAWN_METEOR:
             meteors.append(Meteor())
 
-    screen.fill((10, 0, 50))
+    screen.fill(bg_color)
 
-    # RENDER YOUR GAME HERE
-    ship.move()
-    ship.shoot(screen)
-    ship.update_bullets(screen)
-    ship.draw(screen)
-    
     for meteor in meteors:
         meteor.update()
         meteor.draw(screen)
 
-    #Kollision
+    if not game_over and not won:
+        ship.move()
+        ship.shoot(screen)
+        ship.update_bullets(screen)
+        ship.draw(screen)
+
+    elif game_over == True:
+        pygame.mixer.music.stop()
+        screen.fill((0,0,0))
+        font = pygame.font.SysFont(None, 80)
+        text = font.render("GAME OVER", True, (255, 0, 0))
+        meteors.clear()
+        screen.blit(text, (800, 400))
+
+    elif won == True:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('sounds/applause.mp3')
+        pygame.mixer.music.play(-1)
+        screen.fill((0, 100, 10))
+        meteors.clear()
+        font = pygame.font.SysFont(None, 80)
+        text = font.render("YOU WON!", True, (0, 255, 0))
+        screen.blit(text, (800, 400))
+
+
+    #Kollision Bullet
     for bullet in ship.bullets[:]:           #[:] macht eine Kopie der Liste... verhindert Fehler beim entfernen
         for meteor in meteors[:]:
             if bullet.colliderect(meteor.rect):
@@ -59,9 +92,43 @@ while running:
                 score += 1
                 break
     
-    score_text(f"Score: {score}")
+    #Kollision Ship
+    if not game_over:
+        for meteor in meteors[:]:
+            if ship.rect.colliderect(meteor.rect):
+                crash.play()
+                game_over = True
+                break
 
-    # flip() the display to put your work on screen
+    #nächstes Level
+    if score >= 3 and level == 1:
+        level = 2
+        pygame.time.set_timer(SPAWN_METEOR, 500)
+
+    elif score >= 5 and level == 2:
+        level = 3
+        pygame.time.set_timer(SPAWN_METEOR, 250)
+
+    elif score >= 10 and level == 3:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('sounds/level4-music.mp3')
+        pygame.mixer.music.play(-1)
+        bg_color = (80, 0, 10)
+        level = 4
+        pygame.time.set_timer(SPAWN_METEOR, 100)
+
+    elif score >= 15 and level == 4:
+        ship.shoot_delay = 150
+        level = 5
+        pygame.time.set_timer(SPAWN_METEOR, 50)
+    
+    elif score >= 50:
+        won = True
+
+    
+    score_text(f"Score: {score}")
+    level_text(f"Level: {level}")
+
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
