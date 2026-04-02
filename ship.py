@@ -10,7 +10,7 @@ class Ship:
         self.bullets = []
         self.shoot_delay = 300
         self.last_shoot = 0
-        #self.sound = pygame.mixer.Sound('''pfad zur datei''')
+        self.sound = pygame.mixer.Sound('sounds/shoot.mp3')
 
     def draw(self, screen):
         screen.blit(self.ship, (self.start_x, self.start_y))
@@ -31,8 +31,8 @@ class Ship:
         current_time = pygame.time.get_ticks()
         if keys[pygame.K_SPACE]:
             if current_time - self.last_shoot >= self.shoot_delay:
+                self.sound.play()
                 bullet = pygame.Rect(self.start_x + 27, self.start_y, 10, 10)
-                #Shoot Sound einfügen (sound.play())
                 self.bullets.append(bullet)
                 self.last_shoot = current_time
             
