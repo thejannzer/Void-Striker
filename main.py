@@ -9,6 +9,8 @@ pygame.display.set_caption("Void Striker")
 clock = pygame.time.Clock()
 running = True
 
+score = 0
+
 ship = Ship()
 
 meteors = []
@@ -16,6 +18,12 @@ meteors = []
 #eigenes Event für Meteor-Spawn
 SPAWN_METEOR = pygame.USEREVENT + 1
 pygame.time.set_timer(SPAWN_METEOR, 1000)  # alle 1000 ms
+
+def score_text(text):
+    font = pygame.font.SysFont("arial", 40)
+    text_surface = font.render(text, True, (255, 255, 255))
+    screen.blit(text_surface, (20, 20))
+ 
 
 while running:
     for event in pygame.event.get():
@@ -43,7 +51,10 @@ while running:
             if bullet.colliderect(meteor.rect):
                 ship.bullets.remove(bullet)
                 meteors.remove(meteor)
+                score += 1
                 break
+    
+    score_text(f"Score: {score}")
 
     # flip() the display to put your work on screen
     pygame.display.flip()
