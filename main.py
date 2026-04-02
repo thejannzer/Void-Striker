@@ -4,6 +4,9 @@ from meteor import Meteor
 
 # pygame setup
 pygame.init()
+pygame.mixer.init()
+music = pygame.mixer.Sound('sounds/retro-music.mp3')
+crash = pygame.mixer.Sound('sounds/crash-sound.mp3')
 screen = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("Void Striker")
 clock = pygame.time.Clock()
@@ -24,6 +27,7 @@ def score_text(text):
     text_surface = font.render(text, True, (255, 255, 255))
     screen.blit(text_surface, (20, 20))
  
+music.play(-1)
 
 while running:
     for event in pygame.event.get():
@@ -49,6 +53,7 @@ while running:
     for bullet in ship.bullets[:]:           #[:] macht eine Kopie der Liste... verhindert Fehler beim entfernen
         for meteor in meteors[:]:
             if bullet.colliderect(meteor.rect):
+                crash.play()
                 ship.bullets.remove(bullet)
                 meteors.remove(meteor)
                 score += 1
